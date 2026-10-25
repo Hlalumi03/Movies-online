@@ -32,5 +32,5 @@ class Review(Base):
     movie_id = Column(Integer, ForeignKey('movies.id'), nullable=False, index=True)
     rating = Column(Integer, nullable=False)
     text = Column(Text)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc))
     movie = relationship('Movie', back_populates='reviews')

@@ -3,31 +3,153 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Movies Online</title>
+    <meta name="theme-color" content="#09090f" />
+    <title>Movies Online — Find your next favorite</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background:
+          radial-gradient(ellipse at 12% 0%, rgba(124, 58, 237, 0.2), transparent 34rem),
+          radial-gradient(ellipse at 92% 14%, rgba(219, 39, 119, 0.14), transparent 30rem),
+          #09090f;
+      }
+
+      .movie-card {
+        animation: card-arrive 420ms ease both;
+        transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+      }
+
+      .movie-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(196, 181, 253, 0.4);
+        background-color: rgba(255, 255, 255, 0.09);
+      }
+
+      @keyframes card-arrive {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
   </head>
-  <body class="bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 min-h-screen text-white">
-    <div class="container mx-auto p-6">
-      <header class="mb-6">
-        <h1 class="text-4xl font-extrabold">Movies Online</h1>
-        <p class="text-indigo-200">Browse, search and review modern movies.</p>
+  <body class="min-h-screen text-white antialiased">
+    <div class="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+      <header class="flex items-center justify-between border-b border-white/10 py-5">
+        <a href="/" class="flex items-center gap-3" aria-label="Movies Online home">
+          <span class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-pink-500 text-xl shadow-lg shadow-violet-950/40" aria-hidden="true">▶</span>
+          <span class="text-lg font-extrabold tracking-tight sm:text-xl">MOVIES<span class="text-violet-300">ONLINE</span></span>
+        </a>
+        <a href="#browse" class="rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-indigo-100 transition hover:border-violet-300/60 hover:bg-white/5">Explore movies <span aria-hidden="true">↓</span></a>
       </header>
 
-      <div class="bg-white/5 rounded-lg p-4 mb-6">
-        <div class="flex gap-3 items-center">
-          <input id="search" placeholder="Search title, e.g., Edge of Tomorrow" class="flex-1 p-3 rounded bg-white/10 placeholder:text-indigo-200" />
-          <select id="category" class="p-3 rounded bg-white/10">
-            <option value="">All categories</option>
-          </select>
-          <input id="year" type="number" placeholder="Year" class="w-24 p-3 rounded bg-white/10" />
-          <button id="btnSearch" class="bg-indigo-600 px-4 py-2 rounded">Search</button>
-        </div>
-      </div>
-
       <main>
-        <div id="movies" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+        <section class="relative isolate overflow-hidden py-12 sm:py-16 lg:py-20" aria-labelledby="heroHeading">
+          <div class="pointer-events-none absolute -right-12 top-10 -z-10 h-56 w-56 rounded-full bg-fuchsia-600/20 blur-3xl sm:h-80 sm:w-80"></div>
+          <p class="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-400/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-violet-200">
+            <span class="h-2 w-2 rounded-full bg-pink-400 shadow-[0_0_12px_rgba(244,114,182,0.9)]"></span>
+            Your seat is waiting
+          </p>
+          <h1 id="heroHeading" class="max-w-3xl text-4xl font-black leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl">
+            Find your next
+            <span class="bg-gradient-to-r from-violet-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent">favorite movie.</span>
+          </h1>
+          <p class="mt-5 max-w-2xl text-base leading-7 text-indigo-100/75 sm:text-lg">
+            Browse the collection, discover something unexpected, and find out what everyone’s watching.
+          </p>
+          <a href="#browse" class="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 font-bold text-gray-950 shadow-lg shadow-violet-950/30 transition hover:-translate-y-0.5 hover:bg-violet-100">
+            Explore the collection <span aria-hidden="true">→</span>
+          </a>
+        </section>
+
+        <section class="mb-12 scroll-mt-6" aria-labelledby="searchHeading">
+          <div class="mb-4">
+            <h2 id="searchHeading" class="text-lg font-bold">What are you in the mood for?</h2>
+            <p class="mt-1 text-sm text-indigo-100/60">Search by title or mix and match the filters.</p>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/[0.045] p-3 shadow-2xl shadow-black/20 sm:p-5">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6">
+              <label class="relative block min-w-0 sm:col-span-2 lg:col-span-2">
+                <span class="sr-only">Search movie titles</span>
+                <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-lg text-violet-200" aria-hidden="true">⌕</span>
+                <input id="search" aria-label="Search movie titles" placeholder="Try a movie title…" class="w-full rounded-xl border border-white/10 bg-black/30 py-3 pl-10 pr-3 text-white outline-none transition placeholder:text-indigo-100/40 focus:border-violet-400 focus:ring-2 focus:ring-violet-400/20" />
+              </label>
+              <label class="min-w-0">
+                <span class="sr-only">Filter by category</span>
+                <select id="category" aria-label="Filter by category" class="w-full rounded-xl border border-white/10 bg-gray-950 px-3 py-3 text-white outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-400/20">
+                  <option value="">All genres</option>
+                </select>
+              </label>
+              <label class="min-w-0">
+                <span class="sr-only">Filter by minimum rating</span>
+                <select id="minRating" aria-label="Filter by minimum rating" class="w-full rounded-xl border border-white/10 bg-gray-950 px-3 py-3 text-white outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-400/20">
+                  <option value="">Any rating</option>
+                  <option value="3">3+ stars</option>
+                  <option value="4">4+ stars</option>
+                  <option value="4.5">4.5+ stars</option>
+                </select>
+              </label>
+              <label class="min-w-0">
+                <span class="sr-only">Filter by release year</span>
+                <select id="year" aria-label="Filter by release year" class="w-full rounded-xl border border-white/10 bg-gray-950 px-3 py-3 text-white outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-400/20">
+                  <option value="">Any year</option>
+                </select>
+              </label>
+              <button id="btnSearch" class="rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-4 py-3 font-bold shadow-lg shadow-violet-950/30 transition hover:from-violet-500 hover:to-fuchsia-500 disabled:cursor-wait disabled:opacity-60 sm:col-span-2 lg:col-span-6">Search movies</button>
+            </div>
+          </div>
+        </section>
+
+        <p id="status" class="mb-5 rounded-xl border border-violet-300/15 bg-violet-300/5 px-4 py-3 text-sm text-indigo-100" role="status" aria-live="polite" hidden></p>
+
+        <section id="browse" class="scroll-mt-6" aria-labelledby="catalogHeading">
+          <div class="mb-5 flex flex-col gap-4 border-b border-white/10 pb-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p class="mb-1 text-xs font-bold uppercase tracking-[0.18em] text-violet-300">The collection</p>
+              <h2 id="catalogHeading" class="text-2xl font-extrabold tracking-tight sm:text-3xl">Browse movies</h2>
+            </div>
+            <div class="flex flex-col gap-3 text-sm text-indigo-100/70 sm:flex-row sm:items-center sm:gap-5">
+              <p id="resultCount" aria-live="polite"></p>
+              <nav class="flex items-center justify-between gap-3 sm:justify-start" aria-label="Movie pages">
+                <button id="previousPage" class="rounded-lg border border-white/10 px-3 py-2 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-35" disabled>← Previous</button>
+                <span id="pageNumber" class="min-w-14 text-center">Page 1</span>
+                <button id="nextPage" class="rounded-lg border border-white/10 px-3 py-2 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-35" disabled>Next →</button>
+              </nav>
+            </div>
+          </div>
+          <div id="movies" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"></div>
+        </section>
+
+        <section id="recommendationSection" class="mt-14" aria-labelledby="recommendationHeading">
+          <div class="mb-5 flex flex-wrap items-end justify-between gap-2">
+            <div>
+              <p class="mb-1 text-xs font-bold uppercase tracking-[0.18em] text-fuchsia-300">Picked for your next movie night</p>
+              <h2 id="recommendationHeading" class="text-2xl font-extrabold tracking-tight sm:text-3xl">Recommended for you</h2>
+            </div>
+            <span class="text-sm text-indigo-100/50">A few more ideas to explore</span>
+          </div>
+          <div id="recommendations" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+        </section>
       </main>
+
+      <footer class="mt-16 border-t border-white/10 pt-5 text-center text-sm text-indigo-100/40">
+        Find a story worth staying in for.
+      </footer>
     </div>
-    <script src="/static/app.js"></script>
+
+    <dialog id="movieDialog" class="w-[min(42rem,calc(100%-2rem))] max-h-[85vh] overflow-y-auto rounded-2xl border border-white/10 bg-gray-950 p-5 text-white shadow-2xl shadow-black/50 backdrop:bg-black/75 sm:p-7">
+      <div class="flex justify-end">
+        <button id="closeDetails" type="button" class="rounded-lg border border-white/10 px-3 py-2 text-sm transition hover:bg-white/10">Close <span aria-hidden="true">×</span></button>
+      </div>
+      <section id="movieDetails" class="mt-2"></section>
+    </dialog>
+    <script src="/app.js"></script>
   </body>
 </html>
